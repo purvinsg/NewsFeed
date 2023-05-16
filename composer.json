@@ -1,0 +1,20 @@
+{
+    "name": "purvins/news-feed",
+    "autoload": {
+        "psr-4": {
+            "Purvins\\NewsFeed\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gatis Purvins",
+            "email": "g.purvins@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.6",
+        "nikic/fast-route": "^1.3",
+        "twig/twig": "^3.6",
+        "nesbot/carbon": "^2.66"
+    }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>{% block title %}{% endblock %}News Feed</title>
+    {% endblock %}
+</head>
+<body>
+<nav class="bg-blue-700">
+    <div class="mx-auto max-w-15xl px-3 sm:px-3 lg:px-10">
+        <div class="relative flex h-20 items-center justify-between">
+            <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            </div>
+            <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div class="flex flex-shrink-0 items-center">
+                    <a href="/">
+                        <img class="block h-10 w-auto"
+                                     src="https://f10.pmo.ee/0pDTlutr-lzIX3HhJcxgYW5nBWY=/1200x630/https://f.pmo.ee/logos/4133/ed8c5cee614a30d54b2c62f42ae4f94b.png"
+                                     alt="News logo"></a>
+                </div>
+                <div class="hidden sm:ml-10 sm:block">
+                    <div class="flex space-x-4">
+                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                        <a href="/"
+                           class="text-white hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-m font-medium">Articles</a>
+                        <a href="/users"
+                           class="text-white hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-m font-medium">Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div id="content">{% block content %}{% endblock %}</div>
+<div id="footer">
+    {% block footer %}
+    {% endblock %}
+</div>
+</body>
+</html>
