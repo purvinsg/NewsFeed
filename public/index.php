@@ -7,8 +7,9 @@ require_once '../vendor/autoload.php';
 require_once '../app/Core/Router.php';
 require_once '../app/Core/Renderer.php';
 
-$path = Router::route();
+$routes = require_once '../routes.php';
+$response = Router::route($routes);
 
 $renderer = new Renderer();
 
-echo $renderer->render($path);
+echo $renderer->render($response);

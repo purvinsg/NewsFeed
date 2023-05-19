@@ -3,53 +3,45 @@
 namespace App\Controllers;
 require_once __DIR__ . '/../ApiClient.php';
 require_once __DIR__ . '/../Core/View.php';
+require_once __DIR__ . '/../Services/Article/indexArticleService.php';
+require_once __DIR__ . '/../Services/Article/Show/ShowArticleRequest.php';
+require_once __DIR__ . '/../Services/Article/Show/ShowArticleService.php';
+require_once __DIR__ . '/../Services/Article/Show/ShowArticleResponse.php';
+require_once __DIR__ . '/../Exceptions/RecourseNotFoundException.php';
 
-use App\ApiClient;
 use App\Core\View;
+use App\Exceptions\RecourseNotFoundException;
+use App\Services\Article\IndexArticleService;
+use App\Services\Article\Show\ShowArticleRequest;
+use App\Services\Article\Show\ShowArticleService;
+
 
 class ArticleController
 {
-    private ApiClient $client;
-
-    public function __construct()
+    public function index(): View
     {
-        $this->client = new ApiClient();
+        $service = new IndexArticleService();
+        $articles = $service->execute();
+
+        return new View('articles', ['articles' => $articles]);
     }
 
-    public function articles(): View
+    public function show(array $vars): View
     {
-        $articles = $this->client->getArticles();
 
-        return new View('articles.twig',
-            ['articles' => $articles]);
-    }
-
-    public function users(): View
-    {
-        $users = $this->client->getUsers();
-        return new View('users.twig',
-            ['users' => $users]);
-    }
-
-    public function singleArticle(array $vars): View
-    {
-        $article = $this->client->getSingleArticle((int)implode('', $vars));
-        if (!$article) {
-            return new View('notFound.twig', []);
+        try {
+            $articleId = $vars['id'] ?? null;
+            $service = new ShowArticleService();
+            $response = $service->execute(new ShowArticleRequest((int)$articleId));
+        } catch (RecourseNotFoundException $exception) {
+            return new View('notFound', []);
         }
-        $comments = $this->client->getCommentsById($article->getId());
-        return new View('singleArticle.twig',
-            ['article' => $article, 'comments' => $comments]);
+
+        return new View('singleArticle',
+            [
+                'article' => $response->getArticle(),
+                'comments' => $response->getComments()
+            ]);
     }
 
-    public function singleUser(array $vars): View
-    {
-        $user = $this->client->getUser((int)implode('', $vars));
-        if (!$user) {
-            return new View('notFound.twig', []);
-        }
-        $articles = $this->client->getArticlesByUser($user->getId());
-        return new View('singleUser.twig',
-            ['user' => $user, 'articles' => $articles]);
-    }
 }

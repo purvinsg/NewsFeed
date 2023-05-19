@@ -5,6 +5,7 @@ namespace App\Core;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
+
 class Renderer
 {
     private Environment $twig;
@@ -17,6 +18,6 @@ class Renderer
 
     public function render(View $view): string
     {
-        return $this->twig->render($view->getTemplatePath(), $view->getParameters());
+        return $this->twig->render($view->getTemplatePath().'.twig', $view->getParameters());
     }
 }

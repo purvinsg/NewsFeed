@@ -9,5 +9,5 @@
 ```composer require nesbot/carbon```,
 ```composer require twig/twig```.
 3. Run APP using command ```php -S localhost:8000 -t public/```.
-4. Have Fun!
+
    ![Screen Recording](/newsFeed.gif)

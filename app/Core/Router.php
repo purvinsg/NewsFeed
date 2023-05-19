@@ -2,19 +2,19 @@
 
 namespace App\Core;
 require_once __DIR__. '/../Controllers/ArticleController.php';
+require_once __DIR__. '/../Controllers/UserController.php';
 
 use FastRoute;
 
 class Router
 {
-    public static function route()
+    public static function route(array $routes)
     {
-        $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\ArticleController', 'articles']);
-            $r->addRoute('GET', '/articles', ['App\Controllers\ArticleController', 'articles']);
-            $r->addRoute('GET', '/users', ['App\Controllers\ArticleController', 'users']);
-            $r->addRoute('GET', '/article/{id:\d+}', ['App\Controllers\ArticleController', 'singleArticle']);
-            $r->addRoute('GET', '/user/{id:\d+}', ['App\Controllers\ArticleController', 'singleUser']);
+        $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $router) use ($routes) {
+            foreach($routes as $route){
+                [$method, $path, $handler] = $route;
+                $router->addRoute($method, $path, $handler);
+            }
         });
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -29,7 +29,7 @@ class Router
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                return new View('notFound.twig', []);
+                return new View('notFound', []);
             case FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
