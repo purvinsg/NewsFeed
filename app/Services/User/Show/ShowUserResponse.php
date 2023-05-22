@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Services\User\Show;
 require_once __DIR__ . '/../IndexUserService.php';

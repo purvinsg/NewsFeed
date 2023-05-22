@@ -1,19 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Services\Article;
 
-use App\ApiClient;
+use App\Models\Article;
+use App\Repositories\Article\ArticleRepository;
+use App\Repositories\Article\JsonPlaceholderArticleRepository;
+use App\Repositories\User\JsonPlaceholderUserRepository;
+use App\Repositories\User\UserRepository;
 
 class IndexArticleService
 {
-    private ApiClient $client;
+    private ArticleRepository $articleRepository;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
-        $this->client = new ApiClient();
+        $this->articleRepository = new JsonPlaceholderArticleRepository();
+        $this->userRepository = new JsonPlaceholderUserRepository();
     }
     public function execute(): array
     {
-        return $this->client->getArticles();
+        $articles = $this->articleRepository->all();
+        /** @var Article $article */
+        foreach ($articles as $article){
+            $author = $this->userRepository->getById($article->getAuthorId());
+            $article->setAuthor($author);
+        }
+        return $articles;
     }
 }

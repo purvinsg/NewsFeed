@@ -2,7 +2,7 @@
     "name": "purvins/news-feed",
     "autoload": {
         "psr-4": {
-            "Purvins\\NewsFeed\\": "app/"
+            "App\\": "app/"
         }
     },
     "authors": [

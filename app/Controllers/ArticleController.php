@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace App\Controllers;
-require_once __DIR__ . '/../ApiClient.php';
+
 require_once __DIR__ . '/../Core/View.php';
 require_once __DIR__ . '/../Services/Article/indexArticleService.php';
 require_once __DIR__ . '/../Services/Article/Show/ShowArticleRequest.php';

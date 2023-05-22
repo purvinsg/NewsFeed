@@ -1,9 +1,6 @@
-<?php
-
-
+<?php declare(strict_types=1);
 
 namespace App\Services\Article\Show;
-
 require_once __DIR__ . '/../indexArticleService.php';
 use App\Models\Article;
 
