@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use App\Repositories\User\JsonPlaceholderUserRepository;
+use App\Models\User;
 use App\Repositories\User\UserRepository;
 
-class IndexUserService
+class LoginUserService
 {
     private UserRepository $userRepository;
 
@@ -13,8 +13,10 @@ class IndexUserService
     {
         $this->userRepository = $userRepository;
     }
-    public function execute(): array
+
+    public function execute(string $email, string $password): ?User
     {
-        return $this->userRepository->all();
+        return $this->userRepository->login($email, $password);
     }
+
 }

@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
 namespace App\Core;
-require_once __DIR__. '/../Controllers/ArticleController.php';
-require_once __DIR__. '/../Controllers/UserController.php';
 
 use FastRoute;
 
@@ -11,7 +9,7 @@ class Router
     public static function route(array $routes)
     {
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $router) use ($routes) {
-            foreach($routes as $route){
+            foreach ($routes as $route) {
                 [$method, $path, $handler] = $route;
                 $router->addRoute($method, $path, $handler);
             }
@@ -34,7 +32,10 @@ class Router
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 [$controller, $method] = $handler;
-                return (new $controller)->{$method}($vars);
+
+
+                return Container::get()->get($controller)->{$method}($vars);
+
         }
         return null;
     }

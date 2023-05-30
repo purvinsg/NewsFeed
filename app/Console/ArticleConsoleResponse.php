@@ -6,7 +6,7 @@ require_once __DIR__ . '/ConsoleRouter.php';
 require_once __DIR__ . '/../Core/View.php';
 require_once __DIR__ . '/../Models/Article.php';
 require_once __DIR__ . '/../Models/Comment.php';
-require_once __DIR__ . '/../Services/Article/indexArticleService.php';
+require_once __DIR__ . '/../Services/Article/IndexArticleService.php';
 require_once __DIR__ . '/../Services/Article/Show/ShowArticleRequest.php';
 require_once __DIR__ . '/../Services/Article/Show/ShowArticleService.php';
 require_once __DIR__ . '/../Services/Article/Show/ShowArticleResponse.php';
@@ -20,33 +20,35 @@ use App\Services\Article\Show\ShowArticleService;
 
 class ArticleConsoleResponse
 {
-    private ?int $id;
+    private IndexArticleService $indexArticleService;
+    private ShowArticleService $showArticleService;
 
-    public function __construct(?int $id)
+    public function __construct(IndexArticleService $indexArticleService, ShowArticleService $showArticleService)
     {
-        $this->id = $id;
+        $this->showArticleService = $showArticleService;
+        $this->indexArticleService = $indexArticleService;
     }
 
-    public function execute(): void
+    public function execute($id): void
     {
-        if (!$this->id) {
+        if (!$id) {
             $this->index();
             exit;
         }
-        $this->show();
+        $this->show($id);
     }
 
     public function index(): void
     {
-        $service = new IndexArticleService();
+        $service = $this->indexArticleService;
         $articles = $service->execute();
         $this->printIndex($articles);
     }
 
-    public function show(): void
+    public function show($id): void
     {
-        $service = new ShowArticleService();
-        $response = $service->execute(new ShowArticleRequest($this->id));
+        $service = $this->showArticleService;
+        $response = $service->execute(new ShowArticleRequest($id));
         $this->printShow($response->getArticle(), $response->getComments());
     }
 

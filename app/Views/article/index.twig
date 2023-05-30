@@ -1,8 +1,10 @@
 {% extends 'layout.twig' %}
 {% block content %}
     {% if articles is empty %}
-        {% include 'notFound.twig' %}
+        {% include '../notFound.twig' %}
     {% else %}
+
+
         <div class="container my-10 px-6 mx-auto">
             <section class="mb-32 text-gray-800 text-center">
                 <div class="grid lg:grid-cols-3 gap-6 xl:gap-x-12">
@@ -16,15 +18,17 @@
                                     </a>
                                 </div>
 
-                                <h5 class="text-lg font-bold mb-3 text-gray-800">{{ article.title }}</h5>
+                                <h5 class="text-lg font-bold mb-3 text-gray-800">{{ article.title | capitalize }}</h5>
                                 <p class="text-gray-600 mb-6">
-                                    <small>Published {{ 'now'|date('Y') }} by
-                                        <a href="/users/{{ article.author.id }}" class="text-gray-900">{{ article.author.name }}</a>
+                                    <small>Published by
+                                        <a href="/users/{{ article.user_id | capitalize }}"
+                                           class="text-gray-900">{{ article.author.name | capitalize}}</a></small>
+                                    <small>
+                                        {{ article.date }}
                                     </small>
-                                </p>
-                                <p class="text-gray-700">{{ article.body }}</p>
                             </div>
                         </div>
+
                     {% endfor %}
                 </div>
             </section>

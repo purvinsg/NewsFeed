@@ -19,33 +19,37 @@ use App\Services\User\Show\ShowUserService;
 
 class UserConsoleResponse
 {
-    private ?int $id;
+    private IndexUserService $indexUserService;
+    private ShowUserService $showUserService;
 
-    public function __construct(?int $id)
+    public function __construct(IndexUserService $indexUserService, ShowUserService $showUserService)
     {
-        $this->id = $id;
+        $this->indexUserService = $indexUserService;
+        $this->showUserService = $showUserService;
+
     }
 
-    public function execute(): void
+
+    public function execute($id): void
     {
-        if (!$this->id) {
+        if (!$id) {
             $this->index();
             exit;
         }
-        $this->show();
+        $this->show($id);
     }
 
     public function index(): void
     {
-        $service = new IndexUserService();
+        $service = $this->indexUserService;
         $users = $service->execute();
         $this->printIndex($users);
     }
 
-    public function show(): void
+    public function show($id): void
     {
-        $service = new ShowUserService();
-        $response = $service->execute(new ShowUserRequest($this->id));
+        $service = $this->showUserService;
+        $response = $service->execute(new ShowUserRequest($id));
         $this->printShow($response->getUser(), $response->getArticles());
     }
 

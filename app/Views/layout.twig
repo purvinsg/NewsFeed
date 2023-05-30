@@ -20,18 +20,39 @@
                 <div class="flex flex-shrink-0 items-center">
                     <a href="/">
                         <img class="block h-10 w-auto"
-                                     src="https://f10.pmo.ee/0pDTlutr-lzIX3HhJcxgYW5nBWY=/1200x630/https://f.pmo.ee/logos/4133/ed8c5cee614a30d54b2c62f42ae4f94b.png"
-                                     alt="News logo"></a>
+                             src="https://f10.pmo.ee/0pDTlutr-lzIX3HhJcxgYW5nBWY=/1200x630/https://f.pmo.ee/logos/4133/ed8c5cee614a30d54b2c62f42ae4f94b.png"
+                             alt="News logo"></a>
                 </div>
                 <div class="hidden sm:ml-10 sm:block">
                     <div class="flex space-x-4">
-                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="/"
+                        <a href="/articles"
                            class="text-white hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-m font-medium">Articles</a>
                         <a href="/users"
                            class="text-white hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-m font-medium">Users</a>
+                        {% if session.user is not empty %}
+                            <a href="/articles/create"
+                               class="text-white hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-m font-medium">Create New Article</a>
+                        {% endif %}
+                        {% if session.user is empty %}
+                            <a href="/register" class="ml-auto text-sm rounded border-solid border-2 border-[#E6A1D7] py-1 px-2 font-semibold leading-6 text-white hover:text-amber-500">
+                                Register
+                            </a>
+                            <a href="/login" class="ml-auto text-sm rounded border-solid border-2 border-[#E6A1D7] py-1 px-2 font-semibold leading-6 text-white hover:text-amber-500">
+                                Login
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
+                {% if session.user is not empty %}
+                    <div class="flex items-center ml-auto">
+                        <span class="text-white text-sm font-semibold mr-2">Welcome, {{ session.user.name |capitalize}}!</span>
+                        <form method="POST" action="/logout" class="inline-flex">
+                            <button class="text-sm rounded border-solid border-2 border-[#E6A1D7] py-1 px-2 font-semibold leading-6 text-white hover:text-amber-500">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

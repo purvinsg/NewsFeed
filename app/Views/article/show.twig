@@ -1,0 +1,88 @@
+{% extends 'layout.twig' %}
+{% block content %}
+    <div class="container my-8 px-6 mx-auto">
+        <section class="mb-8 text-gray-800">
+            <div class="block rounded-lg shadow-lg bg-white">
+                <div class="flex flex-wrap items-center">
+                    <div class="rounded-lg hidden lg:flex grow-0 shrink-0 basis-auto lg:w-6/12 xl:w-4/12">
+                        <img src="{{ article.imageUrl }}" alt="Placeholder picture" class="w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg"/>
+                    </div>
+                    <div class="rounded-lg grow-0 shrink-0 basis-auto w-full lg:w-6/12 xl:w-8/12 pl-4 md:pl-6 mt-3">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-4">{{ article.title }}</h2>
+                            <p class="text-gray-600 mb-6">
+                                {{ article.content }}
+                            </p>
+                            <small class="text-gray-600">Published by
+                                <a href="/users/{{ article.author.id }}" class="text-blue-500 hover:underline">{{ article.author.name }}</a>
+                            </small>
+                            <br>
+                            <small class="text-gray-600">
+                                {{ article.date }}
+                            </small>
+                        </div>
+                        <div class="flex justify-between mt-6">
+                            <a href="/articles/edit/{{ article.id }}">
+                                <button class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                    </svg>
+                                    <span class="font-semibold">Edit</span>
+                                </button>
+                            </a>
+                            <form method="POST" action="/articles/delete" class="pb-3">
+                                <button onClick="return confirm('Are you sure you want to delete this article?')" type="submit" name="delete" value="{{ article.id }}" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    <span class="font-semibold">Delete</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-8 text-gray-800">
+            <h5 class="text-2xl font-semibold text-center mb-4 md:mb-6">Comments: {{ comments|length }}</h5>
+
+            {% if session.user is not empty %}
+                <form action="/comment/{{ article.id }}" method="POST">
+                    <div class="mb-4">
+                        <label for="comment-title" class="block text-sm font-medium text-gray-700">Title</label>
+                        <input type="text" name="title" id="comment-title" class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="comment-body" class="block text-sm font-medium text-gray-700">Comment</label>
+                        <textarea name="content" id="comment-body" rows="3" class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Add Comment
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-4"></div>
+            {% endif %}
+
+            {% for comment in comments %}
+
+                <div class="flex items-start space-x-3 mb-4">
+                    <div class="flex-shrink-0">
+                        <img class="w-12 h-12 rounded-full" src="https://placehold.co/50" alt="">
+                    </div>
+                    <div class="flex-1 bg-gray-100 rounded-lg px-4 py-2 sm:px-6 sm:py-4">
+                        <div class="font-bold text-lg">{{ comment.title|capitalize }}</div>
+                        <div class="text-sm text-gray-600">
+                            <a href="/users/{{ comment.user.id }}" class="text-blue-500 hover:underline">{{ comment.user.name |capitalize }}</a>
+                        </div>
+                        <div class="text-sm mt-2">
+                            {{ comment.body|capitalize }}
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

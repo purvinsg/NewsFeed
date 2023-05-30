@@ -1,0 +1,33 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Edit Article{% endblock %}
+
+{% block content %}
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h1 class="text-xl font-bold mb-3">Edit Article</h1>
+                    <form method="POST" action="/articles/edit/{{ article.id }}">
+                        <div class="mb-4">
+                            <label for="title" class="text-xl text-gray-600">Title</label>
+                            <input type="text" name="title" id="title" class="border-2 border-gray-300 p-2 w-full" value="{{ article.title }}" required>
+                        </div>
+
+                        <div class="mb-8">
+                            <label for="content" class="text-xl text-gray-600">Content</label>
+                            <textarea id="content" name="content" class="border-2 border-gray-500 w-full" rows="15" required>{{ article.content }}</textarea>
+                        </div>
+
+                        <div class="flex p-1 justify-end">
+                            <button type="submit" class="p-3 mr-3 bg-blue-500 text-white hover:bg-blue-400 rounded">Submit Changes</button>
+                            <a href="/articles/{{ article.id }}">
+                                <button type="button" class="p-3 bg-gray-500 text-white hover:bg-gray-400 rounded">Cancel</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

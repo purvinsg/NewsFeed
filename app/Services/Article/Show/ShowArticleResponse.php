@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace App\Services\Article\Show;
-require_once __DIR__ . '/../indexArticleService.php';
+require_once __DIR__ . '/../IndexArticleService.php';
 use App\Models\Article;
 
 class ShowArticleResponse

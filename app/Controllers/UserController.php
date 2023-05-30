@@ -1,45 +1,86 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace App\Controllers;
 
-require_once __DIR__ . '/../Core/View.php';
-require_once __DIR__ . '/../Services/User/IndexUserService.php';
-require_once __DIR__ . '/../Services/User/Show/ShowUserRequest.php';
-require_once __DIR__ . '/../Services/User/Show/ShowUserService.php';
-require_once __DIR__ . '/../Services/User/Show/ShowUserResponse.php';
-
-
-use App\ApiClient;
+use App\Core\Session;
 use App\Core\View;
 use App\Exceptions\RecourseNotFoundException;
+use App\Services\User\Create\CreateUserRequest;
+use App\Services\User\Create\CreateUserService;
 use App\Services\User\IndexUserService;
 use App\Services\User\Show\ShowUserRequest;
 use App\Services\User\Show\ShowUserResponse;
 use App\Services\User\Show\ShowUserService;
+use App\DataCheck;
 
 class UserController
 {
+    private IndexUserService $indexUserService;
+    private ShowUserService $showUserService;
+    private CreateUserService $createUserService;
+
+    public function __construct(
+        IndexUserService  $indexUserService,
+        ShowUserService   $showUserService,
+        CreateUserService $createUserService
+    )
+    {
+        $this->indexUserService = $indexUserService;
+        $this->showUserService = $showUserService;
+        $this->createUserService = $createUserService;
+    }
+
     public function index(): View
     {
-        $service = new IndexUserService();
+        $service = $this->indexUserService;
         $users = $service->execute();
-        return new View('users', ['users' => $users]);
+        return new View('user/index', ['users' => $users]);
     }
 
     public function show(array $vars): View
     {
         try {
             $userId = $vars['id'];
-            $service = new ShowUserService();
+            $service = $this->showUserService;
             $request = $service->execute(new ShowUserRequest((int)$userId));
             $response = new ShowUserResponse($request->getUser(), $request->getArticles());
-            return new View('singleUser',
+            return new View('user/show',
                 [
                     'user' => $response->getUser(),
                     'articles' => $response->getArticles()
                 ]);
-        }catch (RecourseNotFoundException $exception){
+        } catch (RecourseNotFoundException $exception) {
             return new View('notFound', []);
         }
+    }
+
+    public function register(): View
+    {
+        return new View('register', []);
+    }
+
+    public function store()
+    {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $passwordRepeat = $_POST['password_repeat'];
+        $name = $_POST['name'];
+
+        if (DataCheck::registrationForm($email, $password, $passwordRepeat)) {
+            Session::flash('email', $email);
+            header('Location: /register');
+            exit;
+        }
+
+        $user = $this->createUserService->execute(new CreateUserRequest($email, $password,$name));
+
+        if (!$user) {
+            Session::flash('email', $email);
+            header('Location: /register');
+            exit;
+        }
+
+        Session::put('user', $user);
+        header('Location: /');
     }
 }

@@ -67,7 +67,6 @@ class JsonPlaceholderUserRepository implements UserRepository
             $user->username,
             $user->email,
             $user->phone,
-            $user->website
         );
     }
 
