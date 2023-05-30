@@ -66,7 +66,7 @@ class UserController
         $passwordRepeat = $_POST['password_repeat'];
         $name = $_POST['name'];
 
-        if (DataCheck::registrationForm($email, $password, $passwordRepeat)) {
+        if (DataCheck::registrationForm($email, $password, $passwordRepeat, $name)) {
             Session::flash('email', $email);
             header('Location: /register');
             exit;
