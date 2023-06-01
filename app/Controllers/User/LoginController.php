@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 use App\Core\Redirect;
 use App\Core\Session;

@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\Article;
 
 
+use App\Core\Redirect;
 use App\Core\Session;
 use App\Core\View;
-use App\Core\Redirect;
 use App\DataCheck;
 use App\Exceptions\RecourseNotFoundException;
-use App\Services\Article\IndexArticleService;
 use App\Services\Article\Create\CreateArticleRequest;
 use App\Services\Article\Create\CreateArticleService;
+use App\Services\Article\Delete\DeleteArticleService;
+use App\Services\Article\IndexArticleService;
 use App\Services\Article\Show\ShowArticleRequest;
 use App\Services\Article\Show\ShowArticleService;
-use App\Services\Article\Delete\DeleteArticleService;
 use App\Services\Article\Update\UpdateArticleRequest;
 use App\Services\Article\Update\UpdateArticleService;
 

@@ -1,14 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Controllers\Comment;
 
 use App\Core\Redirect;
 use App\Core\Session;
 use App\DataCheck;
-use App\Models\Comment;
 use App\Services\Comment\CreateCommentRequest;
 use App\Services\Comment\CreateCommentService;
-use App\Services\Comment\CreateCommentResponse;
 
 class CommentController
 {

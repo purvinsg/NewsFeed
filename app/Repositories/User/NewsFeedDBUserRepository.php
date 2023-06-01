@@ -116,7 +116,6 @@ class NewsFeedDBUserRepository implements UserRepository
             $user->email,
             $user->password,
             $user->name,
-            $user->username,
             (int)$user->id,
         );
     }

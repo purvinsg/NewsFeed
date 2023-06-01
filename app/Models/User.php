@@ -7,7 +7,6 @@ class User
 
     private string $email;
     private ?string $password;
-    private ?string $username;
     private ?string $name;
     private ?int $id;
 
@@ -15,7 +14,6 @@ class User
         string $email,
         ?string $password = null,
         string $name = null,
-        string $username = null,
         ?int    $id = null
 
     )
@@ -23,7 +21,6 @@ class User
         $this->email = $email;
         $this->password = $password;
         $this->name = $name;
-        $this->username = $username;
         $this->id = $id;
     }
 
@@ -37,12 +34,7 @@ class User
         return $this->name;
     }
 
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

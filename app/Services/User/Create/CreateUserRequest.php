@@ -6,7 +6,6 @@ class CreateUserRequest
 {
     private string $email;
     private string $password;
-
     private string $name;
 
     public function __construct(string $email, string $password, string $name)
@@ -20,11 +19,11 @@ class CreateUserRequest
     {
         return $this->email;
     }
-
     public function getPassword(): string
     {
         return $this->password;
     }
+
     public function getName(): string
     {
         return $this->name;

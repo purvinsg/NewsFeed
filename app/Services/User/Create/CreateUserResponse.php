@@ -17,4 +17,5 @@ class CreateUserResponse
     {
         return $this->user;
     }
+
 }

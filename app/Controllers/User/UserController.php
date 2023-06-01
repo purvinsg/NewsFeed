@@ -1,34 +1,28 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
-use App\Core\Redirect;
-use App\Core\Session;
+
 use App\Core\View;
 use App\Exceptions\RecourseNotFoundException;
-use App\Services\User\Create\CreateUserRequest;
-use App\Services\User\Create\CreateUserService;
 use App\Services\User\IndexUserService;
 use App\Services\User\Show\ShowUserRequest;
 use App\Services\User\Show\ShowUserResponse;
 use App\Services\User\Show\ShowUserService;
-use App\DataCheck;
+
 
 class UserController
 {
     private IndexUserService $indexUserService;
     private ShowUserService $showUserService;
-    private CreateUserService $createUserService;
 
     public function __construct(
         IndexUserService  $indexUserService,
         ShowUserService   $showUserService,
-        CreateUserService $createUserService
     )
     {
         $this->indexUserService = $indexUserService;
         $this->showUserService = $showUserService;
-        $this->createUserService = $createUserService;
     }
 
     public function index(): View
@@ -54,33 +48,5 @@ class UserController
             return new View('notFound', []);
         }
     }
-
-    public function register(): View
-    {
-        return new View('user/register', []);
-    }
-
-    public function store(): Redirect
-    {
-        $email = $_POST['email'];
-        $name = $_POST['name'];
-        $password = $_POST['password'];
-        $passwordRepeat = $_POST['password_repeat'];
-
-
-        if (DataCheck::registrationForm($email, $name, $password, $passwordRepeat)) {
-            Session::flash('email', $email);
-            return new Redirect('/register');
-        }
-
-        $user = $this->createUserService->execute(new CreateUserRequest($email, $name, $password));
-
-        if (!$user) {
-            Session::flash('email', $email);
-            return new Redirect('/register');
-        }
-
-        Session::put('user', $user);
-        return new Redirect('/');
-    }
 }
+

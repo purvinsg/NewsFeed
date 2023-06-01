@@ -18,36 +18,6 @@ class DataCheck
         return Session::has('errors');
     }
 
-    public static function registrationForm(
-        string $name,
-        string $email,
-        string $password,
-        string $passwordRepeat): bool
-    {
-
-
-        if (self::stringLength($password, 4, 250)) {
-            Session::flash('errors', 'Password must be at least 8 characters');
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            Session::flash('errors', 'Please enter a valid email address');
-        }
-
-        if ($password !== $passwordRepeat) {
-            Session::flash('errors', 'Passwords do not match');
-        }
-        if (self::stringLength($name, 1, 100)) {
-            Session::flash('errors',  'Please enter a valid name');
-        }
-
-        if (!empty($errors)) {
-            Session::flash('errors', $errors);
-        }
-
-        return Session::has('errors');
-    }
-
     public static function comment(string $title, string $content): bool
     {
         if (self::stringLength($title, 5, 500)) {
@@ -61,9 +31,35 @@ class DataCheck
         return Session::has('errors');
     }
 
-    private static function stringLength(string $string, int $min, int $max): bool
+    public static function stringLength(string $string, int $min, int $max = PHP_INT_MAX): bool
     {
         $length = strlen(trim($string));
         return $length < $min || $length > $max;
     }
+
+    public static function registrationForm(
+        string $name,
+        string $email,
+        string $password,
+        string $passwordConfirmation ): bool
+    {
+        if (self::stringLength($password, 8)) {
+            Session::flash('errors', 'Password must be at least 8 characters long');
+        }
+
+        if ($password !== $passwordConfirmation) {
+            Session::flash('errors', 'Passwords do not match');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            Session::flash('errors', 'Please enter a valid email address');
+        }
+
+        if (self::stringLength($name, 1, 100)) {
+            Session::flash('errors', 'Please enter a valid name');
+        }
+
+        return Session::has('errors');
+    }
+
 }
