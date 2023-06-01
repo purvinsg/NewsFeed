@@ -56,20 +56,4 @@ class User
     {
         return $this->password;
     }
-
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
-    public function setUsername(?string $username): void
-    {
-        $this->username = $username;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
 }

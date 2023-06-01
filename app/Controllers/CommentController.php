@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Redirect;
 use App\Core\Session;
 use App\DataCheck;
 use App\Models\Comment;
@@ -18,16 +19,16 @@ class CommentController
         $this->createCommentService = $createCommentService;
     }
 
-    public function create(array $vars)
+    public function create(array $vars): Redirect
     {
         $title = $_POST['title'];
         $content = $_POST['content'];
         $articleId = (int)$vars['id'];
 
-        if(DataCheck::comment($title, $content)){
+        if (DataCheck::comment($title, $content)) {
             Session::flash('title', $title);
             Session::flash('content', $content);
-            header('Location: /articles/'.$articleId);
+            header('Location: /articles/' . $articleId);
             exit();
         }
 
@@ -40,7 +41,6 @@ class CommentController
                 $user->getId(),
             ));
 
-        header('Location: /articles/' . $comment->getArticleId());
+        return new Redirect('/articles/' . $comment->getArticleId());
     }
-
 }

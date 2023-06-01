@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Core\Session;
 use App\Core\View;
+use App\Core\Redirect;
 use App\DataCheck;
 use App\Exceptions\RecourseNotFoundException;
 use App\Services\Article\IndexArticleService;
@@ -74,7 +75,7 @@ class ArticleController
         }
         return new View ('article/create', []);
     }
-    public function update(array $vars)
+    public function update(array $vars): Redirect
     {
         $id = (int)$vars['id'];
         $title = $_POST['title'];
@@ -83,16 +84,14 @@ class ArticleController
         if(DataCheck::article($title, $content)){
             Session::flash('title', $title);
             Session::flash('content', $content);
-            header('Location: /articles/edit/'.$id);
-            exit;
+            return new Redirect('/articles/edit/'.$id);
         }
 
         $this->updateArticleService->execute(new UpdateArticleRequest($title, $content, $id));
 
-        header('Location: /articles/'.$id);
-        exit;
+        return new Redirect('/articles/'.$id);
     }
-    public function store(): void
+    public function store(): Redirect
     {
         $title = $_POST['title'];
         $content = $_POST['content'];
@@ -100,21 +99,19 @@ class ArticleController
         if(DataCheck::article($title, $content)){
             Session::flash('title', $title);
             Session::flash('content', $content);
-            header('Location: /articles/create');
-            exit;
+            return new Redirect('/articles/create');
         }
 
         $userId = Session::getFlashed('user')->getId();
         $article = $this->createArticleService->execute(new CreateArticleRequest($title, $content, $userId));
 
-        header('Location: /articles/'.$article->getResponse()->getId());
+        return new Redirect('/articles/'.$article->getResponse()->getId());
     }
 
-    public function delete(array $vars): void
+    public function delete(array $vars): Redirect
     {
         $this->deleteArticleService->execute((int) $vars['id']);
-        header('Location: /articles');
-        exit;
+        return new Redirect('/articles');
     }
 
     public function edit(array $vars): View

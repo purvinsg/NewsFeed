@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Redirect;
 use App\Core\Session;
 use App\Core\View;
 use App\Exceptions\RecourseNotFoundException;
@@ -56,31 +57,30 @@ class UserController
 
     public function register(): View
     {
-        return new View('register', []);
+        return new View('user/register', []);
     }
 
-    public function store()
+    public function store(): Redirect
     {
         $email = $_POST['email'];
+        $name = $_POST['name'];
         $password = $_POST['password'];
         $passwordRepeat = $_POST['password_repeat'];
-        $name = $_POST['name'];
 
-        if (DataCheck::registrationForm($email, $password, $passwordRepeat, $name)) {
+
+        if (DataCheck::registrationForm($email, $name, $password, $passwordRepeat)) {
             Session::flash('email', $email);
-            header('Location: /register');
-            exit;
+            return new Redirect('/register');
         }
 
-        $user = $this->createUserService->execute(new CreateUserRequest($email, $password,$name));
+        $user = $this->createUserService->execute(new CreateUserRequest($email, $name, $password));
 
         if (!$user) {
             Session::flash('email', $email);
-            header('Location: /register');
-            exit;
+            return new Redirect('/register');
         }
 
         Session::put('user', $user);
-        header('Location: /');
+        return new Redirect('/');
     }
 }

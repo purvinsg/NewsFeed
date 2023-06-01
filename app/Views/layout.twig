@@ -54,6 +54,8 @@
                     </div>
                 {% endif %}
             </div>
+            <pre>{{ session._flash.errors|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+
         </div>
     </div>
 </nav>

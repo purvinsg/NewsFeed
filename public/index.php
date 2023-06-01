@@ -3,6 +3,7 @@
 use App\Core\Renderer;
 use App\Core\Router;
 use App\Core\Session;
+use App\Core\View;
 
 require_once '../vendor/autoload.php';
 
@@ -13,9 +14,14 @@ $dotenv->load();
 $routes = require_once '../routes.php';
 $response = Router::route($routes);
 
-$renderer = new Renderer();
+if($response instanceof View) {
+    $renderer = new Renderer();
 
-echo $renderer->render($response);
+    echo $renderer->render($response);
+    Session::clearFlashed();
+}
 
-Session::clearFlashed();
+if($response instanceof \App\Core\Redirect){
+    header('Location: '.$response->getPath());
+}
 

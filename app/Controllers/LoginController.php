@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Redirect;
 use App\Core\Session;
 use App\Core\View;
 use App\Services\User\LoginUserService;
@@ -19,10 +20,10 @@ class LoginController
 
     public function index(): View
     {
-        return new View('login', []);
+        return new View('user/login', []);
     }
 
-    public function login()
+    public function login(): Redirect
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -32,8 +33,7 @@ class LoginController
         if (!$user) {
             Session::flash('email', $email);
             Session::flash('errors', 'Invalid email address or password');
-            header('Location: /login');
-            exit;
+            return new Redirect('/login');
         }
 
         Session::put('user', $user);
@@ -42,11 +42,10 @@ class LoginController
         exit;
     }
 
-    public function logout()
+    public function logout(): Redirect
     {
         Session::destroy();
-        header('Location: /');
-        exit;
+        return new Redirect('/');
     }
 
 }
